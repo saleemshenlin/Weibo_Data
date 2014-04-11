@@ -65,13 +65,14 @@ namespace weibo_data.Controllers
                     if (sr != null)
                     {
                         string stringLine = sr.ReadLine();
+                        WeiboFromBigData weibo = new WeiboFromBigData();
                         if (stringLine != null)
                         {
                             string result = "";
                             while (stringLine != null)
                             {
                                 result = stringLine.Substring(1, stringLine.Length - 2);
-                                var p1 = JsonConvert.DeserializeObject<WeiboFromBigData>(result);
+                                weibo = JsonConvert.DeserializeObject<WeiboFromBigData>(result);
                                 stringLine = sr.ReadLine();
                             }
                         }

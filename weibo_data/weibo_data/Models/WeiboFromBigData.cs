@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -11,6 +12,11 @@ namespace weibo_data.Models
     /// </summary>
     public class WeiboFromBigData
     {
+        /// <summary>
+        /// WeiboFromBigData 的 id 主键
+        /// </summary>
+        [ScaffoldColumn(false)]
+        public int Id { get; set; }
         /// <summary>
         /// //被评论的微博ID，当本条微博为AAA微博的评论微博时，该字段为AAA对应的微博ID。当本条微博为原创微博或转发微博时，该字段为空。
         /// </summary>
