@@ -1,0 +1,28 @@
+[
+    {
+        "beCommentWeiboId": "",					//被评论的微博ID，当本条微博为AAA微博的评论微博时，该字段为AAA对应的微博ID。当本条微博为原创微博或转发微博时，该字段为空。
+        "beForwardWeiboId": "",					//被转发的微博ID，当本条微博为AAA微博的转发微博时，该字段为AAA对应的微博ID。当本条微博为原创微博或评论微博时，该字段为空。当转发微博的源微博被删除时，该字段为-1。
+        "commentCount": "0",						//当前微博的评论数
+        "content": "您当初要是顺道给我拿回来多好。",
+        "createTime": "1363408059",					//微博创建时间
+        "info1": "",
+        "info2": "",
+        "info3": "",
+        "mlevel": "",
+        "musicurl": [								//当微博包含musicurl时，该字段对应musicurl。
+	"http://ww2.sinaimg.cn/thumbnail/62c6c56ajw1e2ri2cjdl6j.jpg"
+],
+        "pic_list": [								//当微博包含pictureurl时，该字段对应pictureurl。
+            "http://ww2.sinaimg.cn/thumbnail/62c6c56ajw1e2ri2cjdl6j.jpg"
+        ],
+        "praiseCount": "0",							//赞的数目
+        "reportCount": "0",							//转发数
+        "source": "新浪微博",						//微博来源
+        "userId": "1657193834",						//微博创建者
+        "videourl": [								//视频url
+			"http://ww2.sinaimg.cn/thumbnail/62c6c56ajw1e2ri2cjdl6j.jpg"
+],
+        "weiboId": "3556453530624472",				//微博id
+        "weiboUrl": http://weibo.com/1657193834/znGC52Cs8		//微博对应的url
+    }
+]
