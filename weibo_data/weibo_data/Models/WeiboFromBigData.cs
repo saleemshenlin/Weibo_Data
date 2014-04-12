@@ -21,60 +21,60 @@ namespace weibo_data.Models
         /// //被评论的微博ID，当本条微博为AAA微博的评论微博时，该字段为AAA对应的微博ID。当本条微博为原创微博或转发微博时，该字段为空。
         /// </summary>
         [JsonProperty(PropertyName = "beCommentWeiboId")]
-        string CommentWeiboId { get; set; }
+        public string CommentWeiboId { get; set; }
 
         /// <summary>
         /// //被转发的微博ID，当本条微博为AAA微博的转发微博时，该字段为AAA对应的微博ID。当本条微博为原创微博或评论微博时，该字段为空。当转发微博的源微博被删除时，该字段为-1。
         /// </summary>
         [JsonProperty(PropertyName = "beForwardWeiboId")]
-        string ForwardWeiboId { get; set; }
+        public string ForwardWeiboId { get; set; }
         /// <summary>
         /// //当前微博的评论数
         /// </summary>
         [JsonProperty(PropertyName = "commentCount")]
-        string CommentCount { get; set; }
+        public string CommentCount { get; set; }
         /// <summary>
         /// 微博内容
         /// </summary>
         [JsonProperty(PropertyName = "content")]
-        string Content { get; set; }
+        public string Content { get; set; }
         /// <summary>
         /// //微博创建时间
         /// </summary>
         [JsonProperty(PropertyName = "createTime")]
-        string CreateTime { get; set; }
+        public string CreateTime { get; set; }
         /// <summary>
         /// //赞的数目
         /// </summary>
         [JsonProperty(PropertyName = "praiseCount")]
-        string PraiseCount { get; set; }
+        public string PraiseCount { get; set; }
 
         /// <summary>
         /// //转发数
         /// </summary>
         [JsonProperty(PropertyName = "reportCount")]
-        string ReportCount { get; set; }
+        public string ReportCount { get; set; }
         /// <summary>
         /// //微博来源
         /// </summary>
         [JsonProperty(PropertyName = "source")]
-        string Source { get; set; }
+        public string Source { get; set; }
 
         /// <summary>
         /// //微博创建者
         /// </summary>
         [JsonProperty(PropertyName = "souuserIdrce")]
-        string UserId { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// //微博id
         /// </summary>
         [JsonProperty(PropertyName = "weiboId")]
-        string WeiboId { get; set; }
+        public string WeiboId { get; set; }
         /// <summary>
         /// //微博对应的url
         /// </summary>
         [JsonProperty(PropertyName = "weiboUrl")]
-        string WeiboUrl { get; set; }
+        public string WeiboUrl { get; set; }
     }
 }

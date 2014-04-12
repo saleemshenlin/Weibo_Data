@@ -1,0 +1,60 @@
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleFileComparer 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Reflection.AssemblyMetadataAttribute 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IBundleCache 生成存根: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.HttpContextCache 生成存根: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.AssetManager 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleHandler 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleManifest 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleTable 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleDefinition 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.FileVirtualPathProvider 生成存根: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IgnoreList 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleItem 生成存根: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleDirectoryItem 生成存根: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.ItemRegistry 生成存根: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.OptimizationMode 生成存根: 类型是一个值类型。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.Optimizer 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.PatternType 生成存根: 类型是一个值类型。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.PatternHelper 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.Styles 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.Scripts 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.ExceptionUtil 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.VirtualFileComparer 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.DefaultTransform 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.PreApplicationStartCode 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.Resources.OptimizationResources 生成存根: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.UrlUtil 生成存根: 类型已密封。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleFileComparer 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Reflection.AssemblyMetadataAttribute 生成填充码: 类型不受支持，因为存在内部限制。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IItemTransform 生成填充码: 类型是一个接口。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IBundleCache 生成填充码: 类型是一个接口。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.HttpContextCache 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.AssetManager 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleHandler 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IBundleResolver 生成填充码: 类型是一个接口。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.CssRewriteUrlTransform+<>c__DisplayClass1 生成填充码: 类型不受支持，因为存在内部限制。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.FileExtensionReplacementList+Entry 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.FileVirtualPathProvider 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IgnoreList+<>c__DisplayClass1 生成填充码: 类型不受支持，因为存在内部限制。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IgnoreList+<>c__DisplayClass4 生成填充码: 类型不受支持，因为存在内部限制。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IgnoreList+AllMatch 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IgnoreList+IgnoreMatch 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IgnoreList+PrefixMatch 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IgnoreList+SuffixMatch 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IgnoreList+VersionMatch 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleItem 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.BundleDirectoryItem 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.ItemRegistry 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.OptimizationMode 生成填充码: 类型是一个枚举。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.PatternType 生成填充码: 类型是一个枚举。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.PatternHelper 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IBundleBuilder 生成填充码: 类型是一个接口。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IBundleTransform 生成填充码: 类型是一个接口。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.IBundleOrderer 生成填充码: 类型是一个接口。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.DefaultBundleOrderer+<>c__DisplayClass1 生成填充码: 类型不受支持，因为存在内部限制。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.DefaultBundleOrderer+<>c__DisplayClass3 生成填充码: 类型不受支持，因为存在内部限制。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.ExceptionUtil 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.VirtualFileComparer 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.DefaultTransform 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.Resources.OptimizationResources 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。
+D:\GitHub\Weibo_Data\weibo_data\weibo_data\Fakes\System.Web.Optimization.fakes : warning : 无法为 System.Web.Optimization.UrlUtil 生成填充码: 类型对 exported or assembly(System.Web.Optimization.Fakes) 不可见。

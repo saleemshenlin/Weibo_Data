@@ -7,12 +7,17 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using weibo_data.Dals;
 using weibo_data.Models;
 
 namespace weibo_data.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// 连接数据库
+        /// </summary>
+        private WeiboBigDataContext db = new WeiboBigDataContext();
         public ActionResult Index()
         {
             //ViewBag.Message = ReadFolder().ToString();
@@ -73,10 +78,16 @@ namespace weibo_data.Controllers
                             {
                                 result = stringLine.Substring(1, stringLine.Length - 2);
                                 weibo = JsonConvert.DeserializeObject<WeiboFromBigData>(result);
+                                db.WeiboFromBigDatas.Add(weibo);
+                                db.SaveChanges();
                                 stringLine = sr.ReadLine();
                             }
                         }
                     }
+                }
+                catch
+                {
+                    Console.Write("读取出错！");
                 }
                 finally
                 {
