@@ -6,6 +6,12 @@ using System.Web;
 
 namespace weibo_data.Dals
 {
+    /// <summary>
+    /// 迁移数据库
+    /// Enable-Migrations -ContextTypeName weibo_data.Dals.WeiboBigDataContext
+    /// add-migration initDataBase
+    /// update-database
+    /// </summary>
     public class WeiboBigDataContext : DbContext
     {
         // You can add custom code to this file. Changes will not be overwritten.

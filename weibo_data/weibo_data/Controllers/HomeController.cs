@@ -20,8 +20,7 @@ namespace weibo_data.Controllers
         private WeiboBigDataContext db = new WeiboBigDataContext();
         public ActionResult Index()
         {
-            //ViewBag.Message = ReadFolder().ToString();
-            ReadFolder();
+            //ReadFolder();
             return View();
         }
 
@@ -59,6 +58,7 @@ namespace weibo_data.Controllers
 
         private void ReadJsonFromFile(List<string> files)
         {
+            int num = 0;//计数
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             foreach (string filename in files)
             {
@@ -80,14 +80,16 @@ namespace weibo_data.Controllers
                                 weibo = JsonConvert.DeserializeObject<WeiboFromBigData>(result);
                                 db.WeiboFromBigDatas.Add(weibo);
                                 db.SaveChanges();
+                                num+=1;
+                                Console.Write("num:"+num);
                                 stringLine = sr.ReadLine();
                             }
                         }
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    Console.Write("读取出错！");
+                    Console.Write(e.ToString());
                 }
                 finally
                 {
