@@ -198,3 +198,7 @@ E:\github\Weibo_Data\weibo_data\weibo_data\bin\zh-Hans\System.Spatial.resources.
 E:\github\Weibo_Data\weibo_data\weibo_data\bin\zh-Hant\System.Spatial.resources.dll
 E:\github\Weibo_Data\weibo_data\weibo_data\obj\Debug\weibo_data.Migrations.initDataBase.resources
 E:\github\Weibo_Data\weibo_data\weibo_data\obj\Debug\weibo_data.csproj.GenerateResource.Cache
+E:\github\Weibo_Data\weibo_data\weibo_data\bin\NetDimension.Weibo.dll
+E:\github\Weibo_Data\weibo_data\weibo_data\bin\NetDimension.Weibo.pdb
+E:\github\Weibo_Data\weibo_data\weibo_data\bin\NetDimension.Weibo.xml
+E:\github\Weibo_Data\weibo_data\weibo_data\obj\Debug\weibo_data.csprojResolveAssemblyReference.cache

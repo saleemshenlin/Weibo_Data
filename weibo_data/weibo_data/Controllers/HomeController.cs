@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using NetDimension.Weibo;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,14 @@ namespace weibo_data.Controllers
 {
     public class HomeController : Controller
     {
+        public static string APPKEY = "1663244227";
+        public static string APPSECRET = "5cedafd36f790630c49775d7e56e741a";
+        public static string RETURNURL = "https://api.weibo.com/oauth2/default.html";
+        public static OAuth OAUTH;
+        public static string WEIBO_NAME = "saleemshenlin@gmail.com";
+        public static string PASSWORD = "1qaz2wsx";
+        Client Sina = null;
+        string UserID = string.Empty;
         /// <summary>
         /// 连接数据库
         /// </summary>
@@ -21,6 +30,8 @@ namespace weibo_data.Controllers
         public ActionResult Index()
         {
             //ReadFolder();
+            ViewBag.Message = InitWeiboOAuth();
+            ViewBag.User = LoadUserInfo();
             return View();
         }
 
@@ -80,8 +91,8 @@ namespace weibo_data.Controllers
                                 weibo = JsonConvert.DeserializeObject<WeiboFromBigData>(result);
                                 db.WeiboFromBigDatas.Add(weibo);
                                 db.SaveChanges();
-                                num+=1;
-                                Console.Write("num:"+num);
+                                num += 1;
+                                Console.Write("num:" + num);
                                 stringLine = sr.ReadLine();
                             }
                         }
@@ -97,5 +108,56 @@ namespace weibo_data.Controllers
                 }
             }
         }
+
+        /// <summary>
+        /// 初始化Weibo
+        /// </summary>
+        /// <returns></returns>
+        private string InitWeiboOAuth()
+        {
+            if (Session["AccessToken"] == null)
+            {
+                OAUTH = new OAuth(APPKEY, APPSECRET, RETURNURL);
+                if (!OAUTH.ClientLogin(WEIBO_NAME, PASSWORD))
+                {
+                    return "授权登录失败，请重试。";
+                }
+                else
+                {
+                    Session["AccessToken"] = OAUTH.AccessToken;
+                    Sina = new Client(OAUTH);
+                    UserID = Sina.API.Entity.Account.GetUID();
+                    return OAUTH.AccessToken;
+                }
+            }
+            else
+            {
+                return (string)Session["AccessToken"];
+            }
+        }
+        /// <summary>
+        /// place/pois/users
+        /// 米亚罗自然保护区 P01Q5057WTO
+        /// 米亚罗自然保护区 P01Q5057J2X
+        /// </summary>
+        private List<NetDimension.Weibo.Entities.user.Entity> LoadPoiUesr()
+        {
+            IEnumerable<NetDimension.Weibo.Entities.user.Entity> json = Sina.API.Dynamic.Place.POIUsers("P01Q5057WTO", 50, 1,false);
+            List<NetDimension.Weibo.Entities.user.Entity> ds = new List<NetDimension.Weibo.Entities.user.Entity>();
+            return ds;
+        }
+        /// <summary>
+        /// 获取用户信息，我们来个直接把JSON写到页面的方法和下面的方法区别下
+        /// </summary>
+        /// <returns>JSON</returns>
+        public string LoadUserInfo()
+        {
+            NetDimension.Weibo.Entities.user.Entity user = Sina.API.Entity.Users.Show(UserID, null);
+
+            string result = user.ToString();
+
+            return string.Format("{0}", result);
+        }
+
     }
 }
