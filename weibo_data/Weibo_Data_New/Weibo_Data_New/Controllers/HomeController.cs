@@ -147,12 +147,16 @@ namespace Weibo_Data_New.Controllers
         /// 米亚罗自然保护区 B2094653DB64ABFD499C
         /// 
         /// </summary>
-        private List<NetDimension.Weibo.Entities.user.Entity> LoadPoiUesr()
+        private IEnumerable<NetDimension.Weibo.Entities.user.Entity> LoadPoiUesr()
         {
-            //NetDimension.Weibo.Interface.Dynamic.PlaceInterface place = new NetDimension.Weibo.Interface.Dynamic.PlaceInterface(Sina);
+
+            if (Sina == null)
+            {
+                Sina = new Client(OAUTH);
+            }
             dynamic json = Sina.API.Dynamic.Place.POIUsers("B2094757D16FAAFA4392", 50, 1, false);
-            List<NetDimension.Weibo.Entities.user.Entity> ds = new List<NetDimension.Weibo.Entities.user.Entity>();
-            return ds;
+            IEnumerable<NetDimension.Weibo.Entities.user.Entity> users = json;
+            return users;
         }
         /// <summary>
         /// 获取用户信息，我们来个直接把JSON写到页面的方法和下面的方法区别下

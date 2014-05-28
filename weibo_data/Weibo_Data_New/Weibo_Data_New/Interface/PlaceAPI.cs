@@ -131,14 +131,14 @@ namespace NetDimension.Weibo.Interface
 		public string POIShow(string poiID, bool baseApp = false)
 		{
 			return Client.GetCommand("place/pois/show",
-				new WeiboParameter("poiID", poiID),
+				new WeiboParameter("poiid", poiID),
 				new WeiboParameter("base_app", baseApp));
 		}
 
 		public string POIUsers(string poiID, int count = 20, int page = 1, bool baseApp = false)
 		{
 			return Client.GetCommand("place/pois/users",
-				new WeiboParameter("poiID", poiID),
+				new WeiboParameter("poiid", poiID),
 				new WeiboParameter("count", count),
 				new WeiboParameter("page", page),
 				new WeiboParameter("base_app", baseApp));
@@ -147,7 +147,7 @@ namespace NetDimension.Weibo.Interface
 		public string POITips(string poiID, int count = 20, int page = 1, bool sort = false, bool baseApp = false)
 		{
 			return Client.GetCommand("place/pois/tips",
-				new WeiboParameter("poiID", poiID),
+				new WeiboParameter("poiid", poiID),
 				new WeiboParameter("count", count),
 				new WeiboParameter("page", page),
 				new WeiboParameter("sort", sort),
@@ -157,7 +157,7 @@ namespace NetDimension.Weibo.Interface
 		public string POIPhotos(string poiID, int count = 20, int page = 1, bool sort = false, bool baseApp = false)
 		{
 			return Client.GetCommand("place/pois/photos",
-				new WeiboParameter("poiID", poiID),
+				new WeiboParameter("poiid", poiID),
 				new WeiboParameter("count", count),
 				new WeiboParameter("page", page),
 				new WeiboParameter("sort", sort),
