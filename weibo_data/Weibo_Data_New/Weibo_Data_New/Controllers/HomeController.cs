@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Weibo_Data_New.Models;
 
 namespace Weibo_Data_New.Controllers
 {
@@ -17,7 +18,7 @@ namespace Weibo_Data_New.Controllers
         public static string PASSWORD = "1qaz2wsx";
         static Client Sina = null;
         string UserID = string.Empty;
-        
+
         //
         // GET: /Home/
 
@@ -143,11 +144,11 @@ namespace Weibo_Data_New.Controllers
         }
         /// <summary>
         /// place/pois/users
-        /// 米亚罗 B2094757D16FAAFA4392
+        /// 米亚罗 B2094757D16FAAFA4392 530
         /// 米亚罗自然保护区 B2094653DB64ABFD499C
         /// 
         /// </summary>
-        private IEnumerable<NetDimension.Weibo.Entities.user.Entity> LoadPoiUesr()
+        private void LoadPoiUesr()
         {
 
             if (Sina == null)
@@ -155,8 +156,45 @@ namespace Weibo_Data_New.Controllers
                 Sina = new Client(OAUTH);
             }
             dynamic json = Sina.API.Dynamic.Place.POIUsers("B2094757D16FAAFA4392", 50, 1, false);
-            IEnumerable<NetDimension.Weibo.Entities.user.Entity> users = json;
-            return users;
+            //IEnumerable<NetDimension.Weibo.Entities.user.Entity> users = json;
+            if (json.IsDefined("total_number"))
+            {
+                int totalNumber = int.Parse(json.total_number);
+            }
+            if (json.IsDefined("users"))
+            {
+                foreach (var user in json.users)
+                {
+                    User userEntity = new User();
+                    userEntity.ID = user.id;
+                    userEntity.IDStr = user.idstr;
+                    userEntity.Name = user.name;
+                    userEntity.Province = user.province;
+                    userEntity.City = user.city;
+                    userEntity.Location = user.location;
+                    userEntity.ProfileImageUrl = user.profile_image_url;
+                    userEntity.Gender = user.gender;
+                    userEntity.CreatedAt = user.created_at;
+                    if (user.IsDefined("status"))
+                    {
+                        Status statusEntity = new Status();
+                        statusEntity.CreatedAt = user.status.created_at;
+                        statusEntity.ID = user.status.id;
+                        statusEntity.Text = user.status.text;
+                        statusEntity.Source = user.status.source;
+                        statusEntity.ThumbnailPictureUrl = user.status.thumbnail_pic;
+                        statusEntity.MiddleSizePictureUrl = user.status.bmiddle_pic;
+                        statusEntity.OriginalPictureUrl = user.status.original_pic;
+                        statusEntity.Long = 102.806778f;
+                        statusEntity.Lat = 31.657766f;
+                        statusEntity.RepostsCount = int.Parse(user.status.reposts_count);
+                        statusEntity.CommentsCount = int.Parse(user.status.comments_count);
+                        statusEntity.AttitudeCount = int.Parse(user.status.attitudes_count);
+                        statusEntity.User = userEntity;
+                    }
+                }
+            }
+            //return users;
         }
         /// <summary>
         /// 获取用户信息，我们来个直接把JSON写到页面的方法和下面的方法区别下

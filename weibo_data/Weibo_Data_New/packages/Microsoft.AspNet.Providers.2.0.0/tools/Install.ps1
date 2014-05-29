@@ -1,16 +1,15 @@
 param($installPath, $toolsPath, $package, $project)
-
 try {
     # Set up variables
     $timestamp = (Get-Date).ToString('yyyyMMddHHmmss')
     $projectName = [IO.Path]::GetFileName($project.ProjectName.Trim([IO.PATH]::DirectorySeparatorChar, [IO.PATH]::AltDirectorySeparatorChar))
     $catalogName = "aspnet-$projectName-$timestamp"
-    $connectionString ="Data Source=(LocalDb)\v11.0;Initial Catalog=$catalogName;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\$catalogName.mdf"
-    $connectionStringToken = 'Data Source=(LocalDb)\v11.0;'
+    $connectionString ="Data Source=.\SQLEXPRESS;Initial Catalog=$catalogName;Integrated Security=SSPI"
+    $connectionStringToken = "Data Source=.\SQLEXPRESS;Initial Catalog=aspnet-$projectName"
     $config = $project.ProjectItems | Where-Object { $_.Name -eq "Web.config" }    
     $configPath = ($config.Properties | Where-Object { $_.Name -eq "FullPath" }).Value
     
-    #Load the Config File
+    # Load the Config File
     $xml = New-Object System.Xml.XmlDocument
     $xml.Load($configPath)
     
@@ -25,9 +24,38 @@ try {
         $parent.RemoveChild($node) | Out-Null
     }
     
+    function GetConnectionStringToken($connectionStringValue, $tokenName) {
+        $startIndex = $connectionStringValue.IndexOf($tokenName, [StringComparison]::OrdinalIgnoreCase)
+        if ($startIndex -ge 0) {
+            $endIndex = $connectionStringValue.IndexOf(';', $startIndex + 1)
+            $endIndex = if ($endIndex -lt 0) { $connectionStringValue.Length } else { $endIndex }
+            
+            ';' + $connectionStringValue.Substring($startIndex, $endIndex - $startIndex)
+        }
+    }
+    
+    
     # Comment out older providers
     $node = $xml.SelectSingleNode("/configuration/system.web/membership/providers/add[@type='System.Web.Security.SqlMembershipProvider']")
+    $addedNode = $xml.SelectSingleNode("/configuration/system.web/membership/providers/add[@name='DefaultMembershipProvider']")
+    
+    if ($node) {
+        # Copy all attributes other than 'name', 'type' and 'connectionStringName' to the newly added node.
+        $node.Attributes | Where { ! (@('name', 'type', 'connectionStringName') -contains $_.name) } | ForEach {
+            $addedNode.SetAttribute($_.name, $_.value)
+        }
+    }
+    
     $oldConnectionNode = $xml.SelectSingleNode("/configuration/connectionStrings/add[@name='$($node.connectionStringName)']")
+    if ($oldConnectionNode) {
+        $oldConnectionValue = $oldConnectionNode.connectionString
+        # Copy AttachDBFileName and UserInstance values from the old connection string if they exist
+        if ($oldConnectionValue.IndexOf('AttachDBFilename', [StringComparison]::OrdinalIgnoreCase) -ge 0) {
+            $connectionString += ";AttachDBFilename=|DataDirectory|$catalogName.mdf"
+        }
+        $connectionString += (GetConnectionStringToken $oldConnectionValue 'User Instance')
+    }
+    
     CommentNode $node
     CommentNode $oldConnectionNode
     
@@ -42,7 +70,7 @@ try {
     CommentNode $node
     CommentNode $oldConnectionNode
     
-    # Verify that the connectionStrings node exists
+    # Change the Connection string
     $connectionStrings = $xml.SelectSingleNode("/configuration/connectionStrings")
     if (!$connectionStrings) {
         $connectionStrings = $xml.CreateElement("connectionStrings")
@@ -51,8 +79,9 @@ try {
     
     if (!($connectionStrings.SelectNodes("add[@name='DefaultConnection']") | Where { $_.connectionString.StartsWith($connectionStringToken, 'OrdinalIgnoreCase') })) {
         # If there aren't any connection strings that look like ours, proceed to add one
+        
         $newConnectionNode = $xml.CreateElement("add")
-        $newConnectionNode.SetAttribute("name", 'DefaultConnection')
+        $newConnectionNode.SetAttribute("name", "DefaultConnection")
         $newConnectionNode.SetAttribute("providerName", "System.Data.SqlClient")
         $newConnectionNode.SetAttribute("connectionString", $connectionString)
         
@@ -69,8 +98,8 @@ try {
 # SIG # Begin signature block
 # MIIaRAYJKoZIhvcNAQcCoIIaNTCCGjECAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUCI4oa6SQz5TLmVruHOoK6N6p
-# eUqgghUtMIIEoDCCA4igAwIBAgIKYRnMkwABAAAAZjANBgkqhkiG9w0BAQUFADB5
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUuH2Rgyk3OVispuphXZ9zNevP
+# 8EGgghUtMIIEoDCCA4igAwIBAgIKYRnMkwABAAAAZjANBgkqhkiG9w0BAQUFADB5
 # MQswCQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVk
 # bW9uZDEeMBwGA1UEChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSMwIQYDVQQDExpN
 # aWNyb3NvZnQgQ29kZSBTaWduaW5nIFBDQTAeFw0xMTEwMTAyMDMyMjVaFw0xMzAx
@@ -95,32 +124,32 @@ try {
 # m7iPXIgONpRsMwe4qa1RoNDC3I4iEr3D34LXVqH33fClIFcQEJ3urIZ0bHGbwfDy
 # wnBep9ttTTdYmU15QNA0XVolrmfrG05GBrCMKR+jEI+lM58j1fi1Rn3g7mOYkEs+
 # BagvsBizWaSvQVOOCAUQLSrJOgZMHC6pMVFWZKyazKyXmCmKl5CH6p22MIIEujCC
-# A6KgAwIBAgIKYQUTNgAAAAAAGjANBgkqhkiG9w0BAQUFADB3MQswCQYDVQQGEwJV
+# A6KgAwIBAgIKYQUZlgAAAAAAGzANBgkqhkiG9w0BAQUFADB3MQswCQYDVQQGEwJV
 # UzETMBEGA1UECBMKV2FzaGluZ3RvbjEQMA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UE
 # ChMVTWljcm9zb2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3NvZnQgVGlt
-# ZS1TdGFtcCBQQ0EwHhcNMTEwNzI1MjA0MjE3WhcNMTIxMDI1MjA0MjE3WjCBszEL
+# ZS1TdGFtcCBQQ0EwHhcNMTEwNzI1MjA0MjE5WhcNMTIxMDI1MjA0MjE5WjCBszEL
 # MAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0b24xEDAOBgNVBAcTB1JlZG1v
 # bmQxHjAcBgNVBAoTFU1pY3Jvc29mdCBDb3Jwb3JhdGlvbjENMAsGA1UECxMETU9Q
-# UjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjE1OUMtQTNGNy0yNTcwMSUwIwYD
+# UjEnMCUGA1UECxMebkNpcGhlciBEU0UgRVNOOjlFNzgtODY0Qi0wMzlEMSUwIwYD
 # VQQDExxNaWNyb3NvZnQgVGltZS1TdGFtcCBTZXJ2aWNlMIIBIjANBgkqhkiG9w0B
-# AQEFAAOCAQ8AMIIBCgKCAQEAnDSYGckJKWOZAhZ1qIhXfaG7qUES/GSRpdYFeL93
-# 3OzmrrhQTsDjGr3tt/34IIpxOapyknKfignlE++RQe1hJWtRre6oQ7VhQiyd8h2x
-# 0vy39Xujc3YTsyuj25RhgFWhD23d2OwW/4V/lp6IfwAujnokumidj8bK9JB5euGb
-# 7wZdfvguw2oVnDwUL+fVlMgiG1HLqVWGIbda80ESOZ/wValOqiUrY/uRcjwPfMCW
-# ctzBo8EIyt7FybXACl+lnAuqcgpdCkB9LpjQq7KIj4aA6H3RvlVr4FgsyDY/+eYR
-# w/BDBYV4AxflLKcpfNPilRcAbNvcrTwZOgLgfWLUzvYdPQIDAQABo4IBCTCCAQUw
-# HQYDVR0OBBYEFPaDiyCHEe6Dy9vehaLSaIY3YXSQMB8GA1UdIwQYMBaAFCM0+NlS
+# AQEFAAOCAQ8AMIIBCgKCAQEA08s7U6KfRKN6q01WcVOKd6o3k34BPv2rAqNTqf/R
+# sSLFAJDndW7uGOiBDhPF2GEAvh+gdjsEDQTFBKCo/ENTBqEEBLkLkpgCYjjv1DMS
+# 9ys9e++tRVeFlSCf12M0nGJGjr6u4NmeOfapVf3P53fmNRPvXOi/SJNPGkMHWDiK
+# f4UUbOrJ0Et6gm7L0xVgCBSJlKhbPzrJPyB9bS9YGn3Kiji8w8I5aNgtWBoj7SoQ
+# CFogjIKl7dGXRZKFzMM3g98NmHzF07bgmVPYeAj15SMhB2KGWmppGf1w+VM0gfcl
+# MRmGh4vAVZr9qkw1Ff1b6ZXJq1OYKV8speElD2TF8rAndQIDAQABo4IBCTCCAQUw
+# HQYDVR0OBBYEFHkj56ENvlUsaBgpYoJn1vPhNjhaMB8GA1UdIwQYMBaAFCM0+NlS
 # RnAK7UD7dvuzK7DDNbMPMFQGA1UdHwRNMEswSaBHoEWGQ2h0dHA6Ly9jcmwubWlj
 # cm9zb2Z0LmNvbS9wa2kvY3JsL3Byb2R1Y3RzL01pY3Jvc29mdFRpbWVTdGFtcFBD
 # QS5jcmwwWAYIKwYBBQUHAQEETDBKMEgGCCsGAQUFBzAChjxodHRwOi8vd3d3Lm1p
 # Y3Jvc29mdC5jb20vcGtpL2NlcnRzL01pY3Jvc29mdFRpbWVTdGFtcFBDQS5jcnQw
-# EwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAGL0BQ1P5xtr
-# gudSDN95jKhVgTOX06TKyf6vSNt72m96KE/H0LeJ2NGmmcyRVgA7OOi3Mi/u+c9r
-# 2Zje1gL1QlhSa47aQNwWoLPUvyYVy0hCzNP9tPrkRIlmD0IOXvcEnyNIW7SJQcTa
-# bPg29D/CHhXfmEwAxLLs3l8BAUOcuELWIsiTmp7JpRhn/EeEHpFdm/J297GOch2A
-# djw2EUbKfjpI86/jSfYXM427AGOCnFejVqfDbpCjPpW3/GTRXRjCCwFQY6f889GA
-# noTjMjTdV5VAo21+2usuWgi0EAZeMskJ6TKCcRan+savZpiJ+dmetV8QI6N3gPJN
-# 1igAclCFvOUwggW8MIIDpKADAgECAgphMyYaAAAAAAAxMA0GCSqGSIb3DQEBBQUA
+# EwYDVR0lBAwwCgYIKwYBBQUHAwgwDQYJKoZIhvcNAQEFBQADggEBAEfCdoFbMd1v
+# 0zyZ8npsfpcTUCwFFxsQuEShtYz0Vs+9sCG0ZG1hHNju6Ov1ku5DohhEw/r67622
+# XH+XbUu1Q/snYXgIVHyx+a+YCrR0xKroLVDEff59TqGZ1icot67Y37GPgyKOzvN5
+# /GEUbb/rzISw36O7WwW36lT1Yh1sJ6ZjS/rjofq734WWZWlTsLZxmGQmZr3F8Vxi
+# vJH0PZxLQgANzzgFFCZa3CoFS39qmTjY3XOZos6MUCSepOv1P4p4zFSZXSVmpEEG
+# KK9JxLRSlOzeAoNk/k3U/0ui/CmA2+4/qzztM4jKvyJg0Fw7BLAKtJhtPKc6T5rR
+# ARYRYopBdqAwggW8MIIDpKADAgECAgphMyYaAAAAAAAxMA0GCSqGSIb3DQEBBQUA
 # MF8xEzARBgoJkiaJk/IsZAEZFgNjb20xGTAXBgoJkiaJk/IsZAEZFgltaWNyb3Nv
 # ZnQxLTArBgNVBAMTJE1pY3Jvc29mdCBSb290IENlcnRpZmljYXRlIEF1dGhvcml0
 # eTAeFw0xMDA4MzEyMjE5MzJaFw0yMDA4MzEyMjI5MzJaMHkxCzAJBgNVBAYTAlVT
@@ -188,24 +217,24 @@ try {
 # b3JhdGlvbjEjMCEGA1UEAxMaTWljcm9zb2Z0IENvZGUgU2lnbmluZyBQQ0ECCmEZ
 # zJMAAQAAAGYwCQYFKw4DAhoFAKCBrjAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIB
 # BDAcBgorBgEEAYI3AgELMQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU
-# 37K+vJ1jnPxK8vpkRCAPo9DnSWcwTgYKKwYBBAGCNwIBDDFAMD6gJIAiAE0AaQBj
+# zT4KgQinXtxCYUel1M5oH90P34QwTgYKKwYBBAGCNwIBDDFAMD6gJIAiAE0AaQBj
 # AHIAbwBzAG8AZgB0ACAAQQBTAFAALgBOAEUAVKEWgBRodHRwOi8vd3d3LmFzcC5u
-# ZXQvIDANBgkqhkiG9w0BAQEFAASCAQAch73cCOyClYPbCbF4q17gXzOFADhQ2A8/
-# +brHMZd9c5vDdUB7LXjLdNOYtsXXSR5sqjfFmotLgY+w5nQd85/pHjR+/F+cAo/R
-# aralmkgTPQpfN/qdo4tH/zCzgB+ytdVVBkcwm3tMTwCws7yj5daMsOOx3fawGo20
-# sr/3C3lZpp/vB6tqX4sFPVNxYD48Rhx3VEgu0pfbwqbJJaVw2aJPwN1S+LSh6hpa
-# HxCgm6tzuMY42k/vGZKtvuXOpalK86S8VnJKwEyXtfMZUuybZUAgVRp1zg2/+cjO
-# b9u1WCQ+eMw04zsy1OTpNHjzfGDe0qJPgjz3OOWbeTEEhBQqCb21oYICHTCCAhkG
+# ZXQvIDANBgkqhkiG9w0BAQEFAASCAQAhVgNG5nnabN5QUWJEkbCMFFBMeonJN1r4
+# PKYClmo/Otp3pJd4OyEugJK1PXoov8KuzCrdgFJgNC2J8IMD4EAYMnKGkbhc6H//
+# ksF1ia11HiriEpVhMZ1VmlKUDsQtYVoN/l/7jjzJcYukgDNSaHm8sJUNjSpb79mQ
+# ZO6b6yVDmiB6k2UzY85EOGsrC0+dDuECZjTyKJ71A9arUP8lm/uA/S5N/w9QQQpd
+# 2J3oCaKYsJzzKXUs14xed70I8kI1PzwaVy35Zrk0XvKkpKOmwgDZ/V6rrYQvumi5
+# m4s6AJtqyKdaZnFi/Yu9N+vJQYdvJR5z3WQz6BBdw3u6J0rD+jhYoYICHTCCAhkG
 # CSqGSIb3DQEJBjGCAgowggIGAgEBMIGFMHcxCzAJBgNVBAYTAlVTMRMwEQYDVQQI
 # EwpXYXNoaW5ndG9uMRAwDgYDVQQHEwdSZWRtb25kMR4wHAYDVQQKExVNaWNyb3Nv
 # ZnQgQ29ycG9yYXRpb24xITAfBgNVBAMTGE1pY3Jvc29mdCBUaW1lLVN0YW1wIFBD
-# QQIKYQUTNgAAAAAAGjAHBgUrDgMCGqBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
-# BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMDUyMjE5NDE1M1owIwYJKoZIhvcNAQkEMRYE
-# FJdEhK3IY0sOuO94jDHTXmesWLHdMA0GCSqGSIb3DQEBBQUABIIBAA1fOCfslUgv
-# l9f/HtpuO02C0hSKnBkSGbD2rh9lFY4hL4rpwQksPDLtRcuZzcPtwq48YXbDMg+I
-# Xe2SI6nUGkuk2PScgvYlLQ2PdODyLfI591wMwGfcBxmoU3kXyqyMLccIUBAi8lQV
-# Bb8q5JZc6+YDrb1pDB7LZzIPQ29JZfUi/0jnIel/FPEE9hRirsztkaI8BD5YFTlt
-# JtG4xdcR2qzOvPkhBqnnU19oJZ7359KSUstW3N2ndvOXtBBn/yoxcivbXOZE3190
-# PHsxuwpbiDIzsrASHJLWtD7ctufmuT+7hrr+6JL39iQB36E9s7ufmZVSIdvJzZkQ
-# gWbUsIzSSbA=
+# QQIKYQUZlgAAAAAAGzAHBgUrDgMCGqBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
+# BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMDYwNDE2NTgyMFowIwYJKoZIhvcNAQkEMRYE
+# FBIVAM4/PiNoCJ2GPxGnnk8g8IVWMA0GCSqGSIb3DQEBBQUABIIBAJHcFnrnwC7B
+# YG7NsyeZLhoOuA+aZdwj9stE0b2ymjDsfMFPIGZcuBvp6/xlPS62yyl4AVbbO/Wi
+# nG7vPcO+4uTPPmQZir4ub08AA04Z7X+eexLt9q87ssowh3++/td/SXQfIpBredV7
+# R38Ke7Ae2kQ1KY80M8AML02zvMqbZ98yfck/ojFuEYEm96ZwhkeI2EZxtWBz2W9T
+# VM1LPeRlubohM1Nct8GMXrSLY8xUxtPfjrRntRZF99MOFdFmjKX3HmEBmIC8OtF6
+# KU2zGKBt/Z4T4hih8LjZdyQjcUytna9ZM34grT+MV9U61S0OVo5kOnBh5o3sFTT7
+# 7wZ88NWhWEo=
 # SIG # End signature block
