@@ -77,6 +77,7 @@ namespace WeiboDataWithSDK.Controllers
         /// 桃坪寨  B2094653DB64A1F8489D 103.46205 31.57092
         /// 白空寺 B2094653DB64ABFE459D 103.45392 31.60256
         /// 甘堡藏家 B2094653DB64A1F4409D 103.19954 31.48252
+        /// 孟屯河（无poi）103.119773 31.684551
         /// </summary>
         private void LoadPoiUesr()
         {
@@ -85,7 +86,7 @@ namespace WeiboDataWithSDK.Controllers
             {
                 Sina = new Client(OAUTH);
             }
-            dynamic json = Sina.API.Dynamic.Place.POIUsers("B2094653DB64A1F4409D", 50, 1, false);
+            dynamic json = Sina.API.Dynamic.Place.POIUsers("B2094653DB64ABFE459D", 50, 1, false);
             //IEnumerable<NetDimension.Weibo.Entities.user.Entity> users = json;
             if (json.IsDefined("total_number"))
               {
@@ -95,7 +96,7 @@ namespace WeiboDataWithSDK.Controllers
             LoadPoiUserReadJson(json);
             for (int i = 2; i <= times; i++)
             {
-                dynamic newjson = Sina.API.Dynamic.Place.POIUsers("B2094653DB64A1F4409D", 50, i, false);
+                dynamic newjson = Sina.API.Dynamic.Place.POIUsers("B2094653DB64ABFE459D", 50, i, false);
                 LoadPoiUserReadJson(newjson);
             }
             //return users;
