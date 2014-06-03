@@ -389,7 +389,9 @@ namespace WeiboDataWithSDK.Controllers
             List<Status> statuses = db.StatusDb.ToList();
             List<User> users = db.UserDb.ToList();
             User user = new User();
-            PropertyInfo[] userInfo = user.GetType().GetProperties(); ;
+            Status status = new Status();
+            PropertyInfo[] userInfo = user.GetType().GetProperties();
+            PropertyInfo[] statusInfo = status.GetType().GetProperties();
             object oOpt = System.Reflection.Missing.Value; //for optional arguments
             Microsoft.Office.Interop.Excel.Application oXL = new Microsoft.Office.Interop.Excel.Application();
             Microsoft.Office.Interop.Excel.Workbooks oWBs = oXL.Workbooks;
@@ -397,25 +399,33 @@ namespace WeiboDataWithSDK.Controllers
             Microsoft.Office.Interop.Excel.Worksheet oSheet = (Microsoft.Office.Interop.Excel.Worksheet)oWB.Worksheets[1];
 
             //outputRows is a List<List<object>>
-            int numberOfRows = users.Count;
-            int numberOfColumns = userInfo.Count();
+            int numberOfRows = statuses.Count(); //users.Count;
+            int numberOfColumns = statusInfo.Count();//userInfo.Count();
 
             Microsoft.Office.Interop.Excel.Range oRng;
             for (int i = 0; i < numberOfColumns; i++)
             {
-                oSheet.Cells[1, i + 1] = userInfo[i].Name;
+                oSheet.Cells[1, i + 1] = statusInfo[i].Name;
                 oRng = (Microsoft.Office.Interop.Excel.Range)oSheet.Cells[1, i + 1];
                 oRng.Interior.ColorIndex = 15;
             }
 
             int row = 0;
-            foreach (var newuser in users)
+            foreach (var newstatus in statuses)
             {
+                if (row < 6000)
+                {
+                    row++;
+                    continue;
+                }
                 for (int col = 0; col < numberOfColumns; col++)
                 {
                     try
                     {
-                        oSheet.Cells[row + 2, col + 1] = userInfo[col].GetValue(newuser,null);
+                        if (!statusInfo[col].Name.Equals("User"))
+                        {
+                            oSheet.Cells[row + 2, col + 1] = statusInfo[col].GetValue(newstatus, null);
+                        }
                     }
                     catch
                     {
