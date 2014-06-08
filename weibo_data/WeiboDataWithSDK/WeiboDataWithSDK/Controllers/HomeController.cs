@@ -8,6 +8,8 @@ using weibo_data.Dals;
 using WeiboDataWithSDK.Models;
 using Microsoft.Office.Interop.Excel;
 using System.Reflection;
+using System.IO;
+using System.Xml;
 
 namespace WeiboDataWithSDK.Controllers
 {
@@ -33,7 +35,8 @@ namespace WeiboDataWithSDK.Controllers
             //LoadPoiUesr();
             //LoadNearbyUser(103.119773f, 31.684551f);//103.119773 31.684551
             //LoadPoiTimeLine("B2094653DB64A1F4409D", 31.48252f, 103.19954f); //B2094653DB64A1F4409D 103.19954 31.48252
-            DataBaseToExcel();
+            //DataBaseToExcel();
+            ReadFolder();
             return View();
         }
 
@@ -382,6 +385,59 @@ namespace WeiboDataWithSDK.Controllers
             string result = user.ToString();
 
             return string.Format("{0}", result);
+        }
+
+        /// <summary>
+        /// 读取抓取数据文件夹中的文件名
+        /// </summary>
+        private void ReadFolder()
+        {
+            List<string> result = new List<string>();
+            string url = Server.MapPath("Hazard_Data");
+            DirectoryInfo TheFolder = new DirectoryInfo(url);
+            if (TheFolder != null)
+            {
+                FileInfo[] Folders = TheFolder.GetFiles();
+                foreach (FileInfo fileinfo in Folders)
+                {
+                    result.Add(fileinfo.Name);
+                }
+            }
+            ReadXMLFromFile(result);
+        }
+        /// <summary>
+        /// 读取XML中的微博id
+        /// </summary>
+        /// <param name="result"></param>
+        private void ReadXMLFromFile(List<string> result)
+        {
+            foreach (string filename in result)
+            {
+                string fileUrl = Server.MapPath("Hazard_Data/" + filename);
+                XmlDocument doc = new XmlDocument();
+                doc.Load(fileUrl);
+                XmlNode extraction = doc.SelectSingleNode("extraction");
+                try
+                {
+                    XmlNode lixian = extraction.SelectSingleNode("lixian");
+                    XmlNodeList items = lixian.ChildNodes;
+                    foreach (XmlNode item in items)
+                    {
+                        XmlNode mid = item.SelectSingleNode("mid");
+                        string weiboMid = mid.InnerText;
+                        //调用weibo api
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.ToString());
+                }
+                finally
+                {
+                    //sr.Close();
+                }
+            }
         }
 
         private void DataBaseToExcel()

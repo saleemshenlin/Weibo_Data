@@ -147,9 +147,6 @@ D:\GitHub\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\zh-Hans\Sy
 D:\GitHub\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\zh-Hans\System.Web.WebPages.resources.dll
 D:\GitHub\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\zh-Hans\System.Web.WebPages.Deployment.resources.dll
 D:\GitHub\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\zh-Hans\System.Web.WebPages.Razor.resources.dll
-E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\obj\Debug\WeiboDataWithSDK.csprojResolveAssemblyReference.cache
-E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\obj\Debug\WeiboDataWithSDK.Migrations.InitialCreate.resources
-E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\obj\Debug\WeiboDataWithSDK.csproj.GenerateResource.Cache
 E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\WeiboDataWithSDK.dll.config
 E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\WeiboDataWithSDK.dll
 E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\WeiboDataWithSDK.pdb
@@ -202,5 +199,8 @@ E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\System.Web
 E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\System.Web.WebPages.Razor.xml
 E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\zh-Hans\EntityFramework.resources.dll
 E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\bin\zh-Hans\EntityFramework.SqlServer.resources.dll
+E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\obj\Debug\WeiboDataWithSDK.csprojResolveAssemblyReference.cache
+E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\obj\Debug\WeiboDataWithSDK.Migrations.InitialCreate.resources
+E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\obj\Debug\WeiboDataWithSDK.csproj.GenerateResource.Cache
 E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\obj\Debug\WeiboDataWithSDK.dll
 E:\github\Weibo_Data\weibo_data\WeiboDataWithSDK\WeiboDataWithSDK\obj\Debug\WeiboDataWithSDK.pdb
