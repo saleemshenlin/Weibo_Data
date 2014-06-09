@@ -28,6 +28,7 @@ namespace weibo_data.Dals
         }
         public DbSet<User> UserDb { get; set; }
         public DbSet<Status> StatusDb { get; set; }
+        public DbSet<Hazards> HarzardsDb { get; set; }
         //public System.Data.Entity.DbSet<Status> WeiboFromBigDatas { get; set; }
     
     }

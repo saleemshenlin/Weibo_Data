@@ -35,8 +35,9 @@ namespace WeiboDataWithSDK.Controllers
             //LoadPoiUesr();
             //LoadNearbyUser(103.119773f, 31.684551f);//103.119773 31.684551
             //LoadPoiTimeLine("B2094653DB64A1F4409D", 31.48252f, 103.19954f); //B2094653DB64A1F4409D 103.19954 31.48252
-            //DataBaseToExcel();
-            ReadFolder();
+            DataBaseToExcel();
+            //ReadFolder();
+
             return View();
         }
 
@@ -386,6 +387,79 @@ namespace WeiboDataWithSDK.Controllers
 
             return string.Format("{0}", result);
         }
+        /// <summary>
+        /// 根据id调用Status/Show
+        /// </summary>
+        /// <param name="statusid"></param>
+        private void LoadStatusShow(string statusid)
+        {
+            if (Sina == null)
+            {
+                Sina = new Client(OAUTH);
+            }
+            dynamic json = Sina.API.Dynamic.Statuses.Show(statusid);
+            try
+            {
+                if (json != null)
+                {
+                    var isInHarzardsDb = db.HarzardsDb.Find(json.id);
+                    if (isInHarzardsDb == null)
+                    {
+                        Hazards hazardsEntity = new Hazards();
+                        hazardsEntity.CreatedAt = json.created_at;
+                        hazardsEntity.ID = json.id;
+                        hazardsEntity.Text = json.text;
+                        if (hazardsEntity.Text.IndexOf("此微博已被作者删除") <= -1 && hazardsEntity.Text.IndexOf("此微博已被删除") <= -1)
+                        {
+                            User userEntity = new User();
+                            userEntity.ID = json.user.id;
+                            userEntity.IDStr = json.user.idstr;
+                            userEntity.Name = json.user.name;
+                            userEntity.Province = json.user.province;
+                            userEntity.City = json.user.city;
+                            userEntity.Location = json.user.location;
+                            userEntity.ProfileImageUrl = json.user.profile_image_url;
+                            userEntity.Gender = json.user.gender;
+                            userEntity.CreatedAt = json.user.created_at;
+                            var isInUserDb = db.UserDb.Find(json.user.id);
+                            if (isInUserDb == null)
+                            {
+                                db.UserDb.Add(userEntity);
+                                db.SaveChanges();
+                            }
+                            hazardsEntity.Source = json.source;
+                            if (json.IsDefined("thumbnail_pic"))
+                            {
+                                hazardsEntity.ThumbnailPictureUrl = json.thumbnail_pic;
+                                hazardsEntity.MiddleSizePictureUrl = json.bmiddle_pic;
+                                hazardsEntity.OriginalPictureUrl = json.original_pic;
+                            }
+                            if (json.geo != null)
+                            {
+                                hazardsEntity.Long = (float)json.geo.coordinates[1];
+                                hazardsEntity.Lat = (float)json.geo.coordinates[0];
+                            }
+                            //else
+                            //{
+                            //    statusEntity.Long = 0f;
+                            //    statusEntity.Lat = 0f;
+                            //}
+                            hazardsEntity.RepostsCount = int.Parse(json.reposts_count);
+                            hazardsEntity.CommentsCount = int.Parse(json.comments_count);
+                            hazardsEntity.AttitudeCount = int.Parse(json.attitudes_count);
+                            hazardsEntity.UserID = userEntity.ID;
+                            db.HarzardsDb.Add(hazardsEntity);
+                            db.SaveChanges();
+                        }
+                    }
+
+                }
+            }
+            finally
+            {
+
+            }
+        }
 
         /// <summary>
         /// 读取抓取数据文件夹中的文件名
@@ -426,7 +500,7 @@ namespace WeiboDataWithSDK.Controllers
                         XmlNode mid = item.SelectSingleNode("mid");
                         string weiboMid = mid.InnerText;
                         //调用weibo api
-
+                        LoadStatusShow(weiboMid);
                     }
                 }
                 catch (Exception e)
@@ -440,14 +514,18 @@ namespace WeiboDataWithSDK.Controllers
             }
         }
 
+
         private void DataBaseToExcel()
         {
-            List<Status> statuses = db.StatusDb.ToList();
-            List<User> users = db.UserDb.ToList();
+            //List<Status> statuses = db.StatusDb.ToList();
+            //List<User> users = db.UserDb.ToList();
+            List<Hazards> hazards = db.HarzardsDb.ToList();
             User user = new User();
             Status status = new Status();
+            Hazards hazard = new Hazards();
             PropertyInfo[] userInfo = user.GetType().GetProperties();
             PropertyInfo[] statusInfo = status.GetType().GetProperties();
+            PropertyInfo[] hazardInfo = hazard.GetType().GetProperties();
             object oOpt = System.Reflection.Missing.Value; //for optional arguments
             Microsoft.Office.Interop.Excel.Application oXL = new Microsoft.Office.Interop.Excel.Application();
             Microsoft.Office.Interop.Excel.Workbooks oWBs = oXL.Workbooks;
@@ -455,32 +533,32 @@ namespace WeiboDataWithSDK.Controllers
             Microsoft.Office.Interop.Excel.Worksheet oSheet = (Microsoft.Office.Interop.Excel.Worksheet)oWB.Worksheets[1];
 
             //outputRows is a List<List<object>>
-            int numberOfRows = statuses.Count(); //users.Count;
-            int numberOfColumns = statusInfo.Count();//userInfo.Count();
+            int numberOfRows = hazards.Count(); //users.Count;
+            int numberOfColumns = hazardInfo.Count();//userInfo.Count();
 
             Microsoft.Office.Interop.Excel.Range oRng;
             for (int i = 0; i < numberOfColumns; i++)
             {
-                oSheet.Cells[1, i + 1] = statusInfo[i].Name;
+                oSheet.Cells[1, i + 1] = hazardInfo[i].Name;
                 oRng = (Microsoft.Office.Interop.Excel.Range)oSheet.Cells[1, i + 1];
                 oRng.Interior.ColorIndex = 15;
             }
 
             int row = 0;
-            foreach (var newstatus in statuses)
+            foreach (var newstatus in hazards)
             {
-                if (row < 6000)
-                {
-                    row++;
-                    continue;
-                }
+                //if (row < 6000)
+                //{
+                //    row++;
+                //    continue;
+                //}
                 for (int col = 0; col < numberOfColumns; col++)
                 {
                     try
                     {
-                        if (!statusInfo[col].Name.Equals("User"))
+                        if (!hazardInfo[col].Name.Equals("User"))
                         {
-                            oSheet.Cells[row + 2, col + 1] = statusInfo[col].GetValue(newstatus, null);
+                            oSheet.Cells[row + 2, col + 1] = hazardInfo[col].GetValue(newstatus, null);
                         }
                     }
                     catch
