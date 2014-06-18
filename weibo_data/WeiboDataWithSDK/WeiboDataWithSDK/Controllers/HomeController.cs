@@ -34,11 +34,11 @@ namespace WeiboDataWithSDK.Controllers
         {
             ViewBag.Message = InitWeiboOAuth();
             ViewBag.User = LoadUserInfo();
-            LoadPoiUesr("B2094650D16AABFF4098", 120.63035f, 31.32469f);
+            //LoadPoiUesr("B2094650D16AABFF4098", 120.63035f, 31.32469f);
             
             //LoadNearbyUser(103.119773f, 31.684551f);//103.119773 31.684551
             //LoadPoiTimeLine("B2094653DB64A1F4409D", 31.48252f, 103.19954f); //B2094653DB64A1F4409D 103.19954 31.48252
-            //DataBaseToExcel();
+            DataBaseToExcel();
             //ReadFolder();
 
             return View();
@@ -526,13 +526,16 @@ namespace WeiboDataWithSDK.Controllers
         {
             //List<Status> statuses = db.StatusDb.ToList();
             //List<User> users = db.UserDb.ToList();
-            List<Hazards> hazards = db.HarzardsDb.ToList();
+            //List<Hazards> hazards = db.HarzardsDb.ToList();
+            List<StatusL> statusLs = db.StatusLDb.ToList();
             User user = new User();
             Status status = new Status();
             Hazards hazard = new Hazards();
+            StatusL statusL = new StatusL();
             PropertyInfo[] userInfo = user.GetType().GetProperties();
             PropertyInfo[] statusInfo = status.GetType().GetProperties();
             PropertyInfo[] hazardInfo = hazard.GetType().GetProperties();
+            PropertyInfo[] statusLInfo = statusL.GetType().GetProperties();
             object oOpt = System.Reflection.Missing.Value; //for optional arguments
             Microsoft.Office.Interop.Excel.Application oXL = new Microsoft.Office.Interop.Excel.Application();
             Microsoft.Office.Interop.Excel.Workbooks oWBs = oXL.Workbooks;
@@ -540,32 +543,32 @@ namespace WeiboDataWithSDK.Controllers
             Microsoft.Office.Interop.Excel.Worksheet oSheet = (Microsoft.Office.Interop.Excel.Worksheet)oWB.Worksheets[1];
 
             //outputRows is a List<List<object>>
-            int numberOfRows = hazards.Count(); //users.Count;
-            int numberOfColumns = hazardInfo.Count();//userInfo.Count();
+            int numberOfRows = statusLs.Count(); //users.Count;
+            int numberOfColumns = statusLInfo.Count();//userInfo.Count();
 
             Microsoft.Office.Interop.Excel.Range oRng;
             for (int i = 0; i < numberOfColumns; i++)
             {
-                oSheet.Cells[1, i + 1] = hazardInfo[i].Name;
+                oSheet.Cells[1, i + 1] = statusLInfo[i].Name;
                 oRng = (Microsoft.Office.Interop.Excel.Range)oSheet.Cells[1, i + 1];
                 oRng.Interior.ColorIndex = 15;
             }
 
             int row = 0;
-            foreach (var newstatus in hazards)
+            foreach (var newstatus in statusLs)
             {
-                //if (row < 6000)
-                //{
-                //    row++;
-                //    continue;
-                //}
+                if (row <= 12000)
+                {
+                    row++;
+                    continue;
+                }
                 for (int col = 0; col < numberOfColumns; col++)
                 {
                     try
                     {
-                        if (!hazardInfo[col].Name.Equals("User"))
+                        if (!statusLInfo[col].Name.Equals("User"))
                         {
-                            oSheet.Cells[row + 2, col + 1] = hazardInfo[col].GetValue(newstatus, null);
+                            oSheet.Cells[row + 2, col + 1] = statusLInfo[col].GetValue(newstatus, null);
                         }
                     }
                     catch
