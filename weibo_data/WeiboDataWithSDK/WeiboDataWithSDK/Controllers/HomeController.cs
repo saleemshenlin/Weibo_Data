@@ -10,6 +10,7 @@ using Microsoft.Office.Interop.Excel;
 using System.Reflection;
 using System.IO;
 using System.Xml;
+using System.Diagnostics;
 
 namespace WeiboDataWithSDK.Controllers
 {
@@ -27,15 +28,17 @@ namespace WeiboDataWithSDK.Controllers
         public static string PASSWORD = "1qaz2wsx";
         static Client Sina = null;
         string UserID = string.Empty;
+        static int count = 0;
         private WeiboBigDataContext db = new WeiboBigDataContext();
         public ActionResult Index()
         {
             ViewBag.Message = InitWeiboOAuth();
             ViewBag.User = LoadUserInfo();
-            //LoadPoiUesr();
+            LoadPoiUesr("B2094650D16AABFF4098", 120.63035f, 31.32469f);
+            
             //LoadNearbyUser(103.119773f, 31.684551f);//103.119773 31.684551
             //LoadPoiTimeLine("B2094653DB64A1F4409D", 31.48252f, 103.19954f); //B2094653DB64A1F4409D 103.19954 31.48252
-            DataBaseToExcel();
+            //DataBaseToExcel();
             //ReadFolder();
 
             return View();
@@ -91,7 +94,7 @@ namespace WeiboDataWithSDK.Controllers
         /// 白空寺 B2094653DB64ABFE459D 103.45392 31.60256
         /// 甘堡藏家 B2094653DB64A1F4409D 103.19954 31.48252
         /// </summary>
-        private void LoadPoiUesr(string poiid)
+        private void LoadPoiUesr(string poiid,float lon,float lat)
         {
             int times = 0;
             if (Sina == null)
@@ -105,15 +108,15 @@ namespace WeiboDataWithSDK.Controllers
                 int totalNumber = int.Parse(json.total_number);
                 times = totalNumber / 50 + 1;
             }
-            LoadPoiUserReadJson(json);
+            LoadPoiUserReadJson(json,lon,lat);
             for (int i = 2; i <= times; i++)
             {
                 dynamic newjson = Sina.API.Dynamic.Place.POIUsers(poiid, 50, i, false);
-                LoadPoiUserReadJson(newjson);
+                LoadPoiUserReadJson(newjson,lon,lat);
             }
             //return users;
         }
-        private void LoadPoiUserReadJson(dynamic json)
+        private void LoadPoiUserReadJson(dynamic json, float lon, float lat)
         {
             try
             {
@@ -121,10 +124,10 @@ namespace WeiboDataWithSDK.Controllers
                 {
                     foreach (var user in json.users)
                     {
-                        var isInUserDb = db.UserDb.Find(user.id);
+                        var isInUserDb = db.UserLDb.Find(user.id);
                         if (isInUserDb == null)
                         {
-                            User userEntity = new User();
+                            UserL userEntity = new UserL();
                             userEntity.ID = user.id;
                             userEntity.IDStr = user.idstr;
                             userEntity.Name = user.name;
@@ -134,14 +137,14 @@ namespace WeiboDataWithSDK.Controllers
                             userEntity.ProfileImageUrl = user.profile_image_url;
                             userEntity.Gender = user.gender;
                             userEntity.CreatedAt = user.created_at;
-                            db.UserDb.Add(userEntity);
+                            db.UserLDb.Add(userEntity);
                             db.SaveChanges();
                             if (user.IsDefined("status"))
                             {
-                                var isInStatusDb = db.StatusDb.Find(user.status.id);
+                                var isInStatusDb = db.StatusLDb.Find(user.status.id);
                                 if (isInStatusDb == null)
                                 {
-                                    Status statusEntity = new Status();
+                                    StatusL statusEntity = new StatusL();
                                     statusEntity.CreatedAt = user.status.created_at;
                                     statusEntity.ID = user.status.id;
                                     statusEntity.Text = user.status.text;
@@ -154,14 +157,18 @@ namespace WeiboDataWithSDK.Controllers
                                             statusEntity.MiddleSizePictureUrl = user.status.bmiddle_pic;
                                             statusEntity.OriginalPictureUrl = user.status.original_pic;
                                         }
-                                        statusEntity.Long = 103.19954f;// 
-                                        statusEntity.Lat = 31.48252f;
+                                        statusEntity.Long = lon;// 
+                                        statusEntity.Lat = lat;
                                         statusEntity.RepostsCount = int.Parse(user.status.reposts_count);
                                         statusEntity.CommentsCount = int.Parse(user.status.comments_count);
                                         statusEntity.AttitudeCount = int.Parse(user.status.attitudes_count);
                                         statusEntity.User = userEntity;
-                                        db.StatusDb.Add(statusEntity);
-
+                                        db.StatusLDb.Add(statusEntity);
+                                        if (Debugger.Launch()&&Debugger.IsLogging())
+                                        {
+                                            count = count +1;
+                                            Debugger.Log(1, "抓取数据", "StatusID:" + statusEntity.ID + "count:" + count);
+                                        }
                                         db.SaveChanges();
                                     }
                                 }

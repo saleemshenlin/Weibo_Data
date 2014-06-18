@@ -269,11 +269,17 @@
     <Compile Include="Migrations\201406090155337_hazardsweibo.Designer.cs">
       <DependentUpon>201406090155337_hazardsweibo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201406180519512_tlx.cs" />
+    <Compile Include="Migrations\201406180519512_tlx.Designer.cs">
+      <DependentUpon>201406180519512_tlx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Hazards.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\StatusL.cs" />
     <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\UserL.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="NetDimenison.Json\Bson\BsonBinaryType.cs" />
     <Compile Include="NetDimenison.Json\Bson\BsonBinaryWriter.cs" />
@@ -572,6 +578,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201406090155337_hazardsweibo.resx">
       <DependentUpon>201406090155337_hazardsweibo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406180519512_tlx.resx">
+      <DependentUpon>201406180519512_tlx.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
